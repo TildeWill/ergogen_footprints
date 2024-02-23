@@ -1,0 +1,132 @@
+# @TildeWill's ergogen PCB footprints
+
+> **Warning**
+>
+> These footprints have only been partially tested and are still under active development. Use them at your own risk.
+
+1. [Installation](#installation)
+    1. [How to add the footprints as a local git submodule](#how-to-add-the-footprints-as-a-local-git-submodule)
+    1. [How to add the footprints as a GitHub Codespaces git submodule](#how-to-add-the-footprints-as-a-github-codespaces-git-submodule)
+    1. [How to use the footprints in your ergogen config](#how-to-use-the-footprints-in-your-ergogen-config)
+    1. [How to clone your ergogen repo](#how-to-clone-your-ergogen-repo)
+    1. [How to update footprints dependencies](#how-to-update-footprints-dependencies)
+    1. [How to remove footprints dependencies](#how-to-remove-footprints-dependencies)
+1. [How to design or modify ergogen footprints](#how-to-design-or-modify-ergogen-footprints)
+1. [Licenses and recognition](#licenses-and-recognition)
+
+## Installation
+
+### How to add the footprints as a local git submodule
+
+> **Warning**
+>
+> If you are using GitHub Codespaces, skip the following instructions and go to the next section.
+
+If you have git setup on your local environment with SSH credentials, you can add the library as a
+git submodule. To use custom footprint, ergogen requires them to be located under a folder named
+`footprints` placed alongside a `config.yaml` file containing the board definition.
+
+Assuming the above files are located at `./ergogen` from the git folder root, then you can use this
+command to add the footprints into a `tildewill` folder in the right location:
+
+```bash
+git submodule add git@github.com:tildewill/ergogen_footprints.git ergogen/footprints/tildewill
+```
+
+Note that you can customize `tildewill` to be whatever name you choose. Just make sure to refer to the custom
+name in your YAML file.
+
+### How to add the footprints as a GitHub Codespaces git submodule
+
+Due to the limitations on how GitHub Codespaces handle submodules, use this command instead of the one above:
+
+```bash
+git submodule add https://github.com/tildewill/ergogen_footprints.git ergogen/footprints/tildewill
+```
+
+### How to use the footprints in your ergogen config
+
+Assuming you used `ergogen/footprints/tildewill` as the destination folder for the submodule, you will be able
+to refer to any footprint contained in that folder as `tildewill/[footprint_filename]`, which would look something like this:
+
+```yaml
+[...]
+pcbs:
+  your_keyboard:
+    outlines:
+      [...]
+    footprints:
+      nice_nano:
+        what: tildewill/nice_nano
+        [...]
+```
+
+### How to clone your ergogen repo
+
+Users who clone your ergogen repo, must also include the submodule. So you should instruct them to clone with `--recursive` mode:
+
+```bash
+git clone --recursive git@github.com:your-user/your-keyboard.git
+```
+
+Alternative they can init and update the submodules in a repo that was already cloned without the `--recursive` argument:
+
+```bash
+git submodule update --init --recursive --remote
+```
+
+### How to update footprints dependencies
+
+When you add a submodule, it won't automatically be updated, meaning that you will maintain files as long as you don't take specific actions. This is great to avoid having to deal with unforseen changes in the source.
+
+Should you however want to update your footprint dependencies, you can run the following command:
+
+```bash
+git submodule update --recursive --remote
+```
+
+This will fetch and checkout the latest commits in the source repo and pull the files so they are available.
+
+Be aware that you will need to commit the submodule update change, or it will revert with a subsequent pull. To do so you can run these commands:
+
+```bash
+# First add the updated submodule to the staged files
+git add ergogen/footprints/tildewill
+# Then commit the staged files to persist the update
+git commit -m "Update footprint submodule"
+```
+
+### How to remove footprints dependencies
+
+If you do not longer need the footprint submodule and want to remove it from your repository, you can simply run this command:
+
+```bash
+git rm ergogen/footprints/tildewill
+```
+
+This will update the `.gitmodules` file to remove the submodule reference and remove the submodule directory. Make sure to commit and push the
+change for it to be persisted and propagated, or it will revert with a subsequent pull:
+
+```bash
+git commit -m "Remove footprint submodule"
+```
+
+## How to design or modify ergogen footprints
+
+[@infused-kim](https://github.com/infused-kim) wrote a [guide on how to convert KiCad footprints to ergogen](https://www.notion.so/nilnil/Convert-Kicad-Footprint-to-Ergogen-8340ce87ad554c69af4e3f92bc9a0898?pvs=4), which
+has been extensively used to create original ergogen footprints in this repository.
+
+## Licenses and recognition
+
+[![CC BY-NC-SA 4.0][cc-by-nc-sa-image]][cc-by-nc-sa]
+
+Furthermore, all of the work I've done wouldn't have been possible without the inspiration or direct reference to the work done by:
+
+- [@ceoloide](https://github.com/ceoloide/) for documenting this pattern for [external footprints]((https://github.com/ceoloide/ergogen-footprints)) so well and their excellent ergogen boards
+- [@flatfootfox](https://github.com/flatfootfox) for the [Ergogen v4 introductory articles](https://flatfootfox.com/ergogen-introduction/)
+- MrZealot / [@ergogen](https://github.com/ergogen) for [ergogen itself](https://github.com/ergogen/ergogen) and building an [amazing community](https://discord.gg/Tj2TUaUW)
+- [@benvallack](https://github.com/benvallack) for the [great keeb content on YouTube](https://www.youtube.com/watch?v=UKfeJrRIcxw) 
+
+[mit]: https://opensource.org/license/mit/
+[cc-by-nc-sa]: http://creativecommons.org/licenses/by-nc-sa/4.0/
+[cc-by-nc-sa-image]: https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png
